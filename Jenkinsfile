@@ -31,5 +31,26 @@ pipeline {
         
             
         }
+        stage('Deploy on Instance 6') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                script{
+                    command='''
+                        ls
+                    '''
+                  // Execute commands
+                  sshPublisher(publishers: [
+				         sshPublisherDesc(
+						 configName: 'Instance-6',
+						 verbose: true,
+                         transfers: [ sshTransfer(execCommand: command    )])])
+						 
+				   flag = true
+                     
+                }
+            }
+        }		
     }
 }
