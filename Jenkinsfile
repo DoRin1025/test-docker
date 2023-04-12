@@ -38,7 +38,8 @@ pipeline {
             steps {
                 script{
                     command='''
-                        ls
+                        pwd
+			ls
                     '''
                   // Execute commands
                   sshPublisher(publishers: [
