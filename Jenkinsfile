@@ -25,7 +25,7 @@ pipeline {
                 branch 'dev'
             }		
             steps {
-	       sh 'docker tag test-push registry.ismartapps.com.au:5000/test-site'
+	       sh 'docker tag test-site registry.ismartapps.com.au:5000/test-site'
                sh 'docker push registry.ismartapps.com.au:5000/test-site'
             }
         
