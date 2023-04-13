@@ -41,11 +41,11 @@ pipeline {
                 script{
                     command='''
                         pwd
-			docker rmi $(docker images | grep ${DOCKER_REGISTRY}/${DOCKER_IMAGE} | grep "<none>" |  awk '{print $3}') --force
-			docker pull ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest
+			docker rmi $(docker images | grep registry.ismartapps.com.au:5000/test-site | grep "<none>" |  awk '{print $3}') --force
+			docker pull registry.ismartapps.com.au:5000/test-site:latest
 			docker stop test-site
 			docker rm test-site
-			docker run --name $DOCKER_IMAGE -d -p 825:80 ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest
+			docker run --name test-site -d -p 825:80 registry.ismartapps.com.au:5000/test-site:latest
                     '''
                   // Execute commands
                   sshPublisher(publishers: [
