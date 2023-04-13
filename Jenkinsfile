@@ -41,6 +41,7 @@ pipeline {
                         pwd
 			docker pull registry.ismartapps.com.au:5000/test-site:latest
 			docker stop test-site
+			docker rm test-site
 			docker run --name test-site -d -p 825:80 registry.ismartapps.com.au:5000/test-site:latest
                     '''
                   // Execute commands
