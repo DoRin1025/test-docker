@@ -43,8 +43,8 @@ pipeline {
                         pwd
 			docker rmi $(docker images | grep $DOCKER_REGISTRY/$DOCKER_IMAGE | grep "<none>" |  awk '{print $3}') --force
 			docker pull $DOCKER_REGISTRY/$DOCKER_IMAGE:latest
-			docker stop $DOCKER_IMAGE
-			docker rm $DOCKER_IMAGE
+			docker stop test-site
+			docker rm test-site
 			docker run --name $DOCKER_IMAGE -d -p 825:80 $DOCKER_REGISTRY/$DOCKER_IMAGE:latest
                     '''
                   // Execute commands
