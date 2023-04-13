@@ -39,6 +39,7 @@ pipeline {
                 script{
                     command='''
                         pwd
+			docker rmi $(docker images | grep registry.ismartapps.com.au:5000/test-site | grep "<none>" |  awk '{print $3}') --force
 			docker pull registry.ismartapps.com.au:5000/test-site:latest
 			docker stop test-site
 			docker rm test-site
