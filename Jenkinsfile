@@ -2,6 +2,8 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerRegistry')
+	DOCKER_REGISTRY = 'registry.ismartapps.com.au:5000'
+	DOCKER_IMAGE = 'test-site'
     }
     stages {
 	
@@ -10,13 +12,13 @@ pipeline {
                 branch 'dev'
             }
             steps {
-                 sh 'docker image build -t test-site .'
+                 sh 'docker image build -t $DOCKER_IMAGE .'
             }
         }
 		
         stage('Login') {
             steps {
-                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login registry.ismartapps.com.au:5000 -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login $DOCKER_REGISTRY -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
 		
@@ -25,8 +27,8 @@ pipeline {
                 branch 'dev'
             }		
             steps {
-	       sh 'docker tag test-site registry.ismartapps.com.au:5000/test-site'
-               sh 'docker push registry.ismartapps.com.au:5000/test-site'
+	       sh 'docker tag $DOCKER_IMAGE $DOCKER_REGISTRY/$DOCKER_IMAGE'
+               sh 'docker push $DOCKER_REGISTRY/$DOCKER_IMAGE'
             }
         
             
@@ -39,11 +41,11 @@ pipeline {
                 script{
                     command='''
                         pwd
-			docker rmi $(docker images | grep registry.ismartapps.com.au:5000/test-site | grep "<none>" |  awk '{print $3}') --force
-			docker pull registry.ismartapps.com.au:5000/test-site:latest
-			docker stop test-site
-			docker rm test-site
-			docker run --name test-site -d -p 825:80 registry.ismartapps.com.au:5000/test-site:latest
+			docker rmi $(docker images | grep $DOCKER_REGISTRY/$DOCKER_IMAGE | grep "<none>" |  awk '{print $3}') --force
+			docker pull $DOCKER_REGISTRY/$DOCKER_IMAGE:latest
+			docker stop $DOCKER_IMAGE
+			docker rm $DOCKER_IMAGE
+			docker run --name $DOCKER_IMAGE -d -p 825:80 $DOCKER_REGISTRY/$DOCKER_IMAGE:latest
                     '''
                   // Execute commands
                   sshPublisher(publishers: [
